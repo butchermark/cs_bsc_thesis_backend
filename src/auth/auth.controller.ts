@@ -35,9 +35,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('validate-and-generate-new-refresh-token')
-  async validateRefreshToken(
-    @Body() refreshTokenDto: RefreshTokenDto,
-  ): Promise<any> {
+  async validateRefreshToken(@Body() refreshTokenDto: string): Promise<any> {
     return this.authService.validateRefreshToken(refreshTokenDto);
   }
 

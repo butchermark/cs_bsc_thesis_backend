@@ -1,8 +1,9 @@
-import { IsInt, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
+import { IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateMessageDto {
-  @IsInt()
-  readonly roomId: number;
+  readonly roomId: string;
+
+  readonly userId: string;
 
   @IsNotEmpty()
   @MinLength(1)

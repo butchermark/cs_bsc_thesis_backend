@@ -24,21 +24,21 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     if (!payload) {
       client.disconnect(true);
     } else {
-      console.log(`Client ${client.id} connected. Auth token: ${token}`);
+      console.log(`Client ${client.id} connected. }`);
     }
   }
 
   @SubscribeMessage('join')
-  handleJoin(client: Socket, roomId: number) {
+  handleJoin(client: Socket, roomId: string) {
     console.log(`Client ${client.id} joined room: ${roomId}`);
-    client.join(roomId.toString());
+    client.join(roomId);
     return roomId;
   }
 
   @SubscribeMessage('leave')
-  handleLeave(client: Socket, roomId: number) {
+  handleLeave(client: Socket, roomId: string) {
     console.log(`Client ${client.id} leaved room: ${roomId}`);
-    client.leave(roomId.toString());
+    client.leave(roomId);
     return roomId;
   }
 
@@ -47,9 +47,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log(
       `Client ${client.id} sended message: ${createMessageDto.content} to room: ${createMessageDto.roomId}`,
     );
+
     const message = await this.messageService.createMessage(createMessageDto);
     client.emit('message', message);
-    client.to(message.roomId.toString()).emit('message', message);
+    client.to(message.roomId).emit('message', message);
   }
 
   @SubscribeMessage('isTyping')

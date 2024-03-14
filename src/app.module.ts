@@ -8,6 +8,8 @@ import { FriendModule } from './friend/friend.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MessageModule } from './message/message.module';
+import { RoomModule } from './room/room.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { MessageModule } from './message/message.module';
     PrismaModule,
     ScheduleModule.forRoot(),
     MessageModule,
+    RoomModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -9,45 +9,59 @@ datasource db {
 
 
 model User {
-  id        String @id @default(uuid())
-  email     String
-  password  String
-  name  String
+  id           String   @id @default(uuid())
+  email        String
+  password     String
+  name         String
   refreshToken String?
-
-
-  createdAt DateTime @default(now())
-  accounts  Account[]
-  friends   Friend[]
+  createdAt    DateTime @default(now())
+  accounts     Account[]
+  friends      Friend[]
+  rooms        Room[]   
+  sentMessages Message[] 
 }
 
 model Account {
-  id         Int      @id @default(autoincrement())
-  userId     String
-  type       String
+  id          Int      @id @default(autoincrement())
+  userId      String
+  type        String
   accountName String
-  accountId  String
-  avatar     String
-  createdAt  DateTime @default(now())
+  accountId   String
+  avatar      String
+  createdAt   DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
 }
 
 model Friend {
-  id        Int      @id @default(autoincrement())
-  userId    String
-  name      String
-  friend_type      String
-  status    Int
-  game      String?
-  accountId String   @unique
-  avatar    String
+  id         Int      @id @default(autoincrement())
+  userId     String
+  name       String
+  friendType String   
+  status     Int
+  game       String?
+  accountId  String   @unique
+  avatar     String
 
   user User @relation(fields: [userId], references: [id])
 }
 
-model Message{
-  id      Int  @id @default(autoincrement())
-  roomId  Int
-  content String
+model Room {
+  id       String      @id @default(uuid())
+  users    User[]
+  messages Message[]
+
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  roomId    String
+  content   String
+  senderId  String   
+
+  room   Room   @relation(fields: [roomId], references: [id])
+  sender User   @relation(fields: [senderId], references: [id])
+
+  createdAt DateTime @default(now())
 }

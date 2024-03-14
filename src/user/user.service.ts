@@ -101,7 +101,7 @@ export class UserService {
             status: friend.personastate,
             game: friend.gameextrainfo,
             avatar: friend.avatar,
-            friend_type: steam,
+            friendType: steam,
           },
         });
       }
@@ -118,7 +118,7 @@ export class UserService {
       await this.prisma.friend.deleteMany({
         where: {
           userId: userId,
-          friend_type: type,
+          friendType: type,
         },
       });
       console.log('Successfully deleted friends for user with ID:', userId);
@@ -235,7 +235,6 @@ export class UserService {
           steamids: steamId,
         },
       });
-      console.log(dataResponse.data.response.players[0]);
       return dataResponse.data.response.players[0];
     } catch (error) {
       console.error('Error in getAccountDataFromSteam:', error);
@@ -244,7 +243,6 @@ export class UserService {
   }
 
   async checkForAccounts(userId: string, type: string) {
-    console.log(userId, type);
     try {
       const existingAccount = await this.prisma.account.findFirst({
         where: {
@@ -252,10 +250,8 @@ export class UserService {
           type: type,
         },
       });
-      console.log('checking');
 
       if (existingAccount) {
-        console.log(existingAccount);
         return existingAccount;
       }
       return null;

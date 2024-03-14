@@ -1,18 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { GetMessagesDto } from './dto/get-messages.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { HttpStatusCode } from 'axios';
 
 @Injectable()
 export class MessageService {
   constructor(private prisma: PrismaService) {}
 
-  async getMessages(getMessagesDto: GetMessagesDto) {
+  async getMessages(roomId: string) {
     try {
       return await this.prisma.message.findMany({
         where: {
-          roomId: getMessagesDto.roomId,
+          roomId: roomId,
         },
       });
     } catch (error) {
@@ -22,11 +20,13 @@ export class MessageService {
   }
 
   async createMessage(createMessageDto: CreateMessageDto) {
+    console.log(createMessageDto);
     try {
       return await this.prisma.message.create({
         data: {
           content: createMessageDto.content,
           roomId: createMessageDto.roomId,
+          senderId: createMessageDto.userId,
         },
       });
     } catch (error) {

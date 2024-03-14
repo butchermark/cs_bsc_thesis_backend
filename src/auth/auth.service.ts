@@ -4,7 +4,6 @@ import { User } from '@prisma/client';
 import * as crypto from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto/auth.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -72,14 +71,12 @@ export class AuthService {
     }
   }
 
-  async validateRefreshToken(refreshTokenDto: RefreshTokenDto) {
+  async validateRefreshToken(refreshToken: string) {
     try {
-      const { sub } = await this.jwtService.verifyAsync(
-        refreshTokenDto.refreshToken,
-        {
-          secret: process.env.JWT_SECRET,
-        },
-      );
+      console.log(refreshToken);
+      const { sub } = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_SECRET,
+      });
 
       const user = await this.prisma.user.findUnique({
         where: {
@@ -100,7 +97,7 @@ export class AuthService {
 
       return tokens;
     } catch (err) {
-      throw new UnauthorizedException('Something went wrong');
+      throw err;
     }
   }
 
@@ -129,7 +126,7 @@ export class AuthService {
       ),
       this.signToken(
         user.id.toString(),
-        parseInt(process.env.JWT_REFRESH_TOKEN_TTL ?? '60', 10),
+        parseInt(process.env.JWT_REFRESH_TOKEN_TTL ?? '10000', 10),
       ),
     ]);
 
