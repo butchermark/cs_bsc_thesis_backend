@@ -49,9 +49,9 @@ export class UserController {
 
   //@UseGuards(AdminAuthGuard)
   @HttpCode(HttpStatus.OK)
-  @Get()
-  findAllUsers(): Observable<User[]> {
-    return this.userService.findAllUsers();
+  @Get('/:id')
+  findAllUsersExepctUser(@Param('id') id: string): Promise<User[]> {
+    return this.userService.findAllUsersExepctUser(id);
   }
 
   @HttpCode(HttpStatus.OK)

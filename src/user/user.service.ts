@@ -41,8 +41,14 @@ export class UserService {
     return user;
   }
 
-  findAllUsers(): Observable<User[]> {
-    return from(this.prisma.user.findMany());
+  async findAllUsersExepctUser(id: string): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        NOT: {
+          id: id,
+        },
+      },
+    });
   }
   cannotFindUser(user: User): void {
     if (!user) {

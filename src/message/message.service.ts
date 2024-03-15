@@ -20,7 +20,6 @@ export class MessageService {
   }
 
   async createMessage(createMessageDto: CreateMessageDto) {
-    console.log(createMessageDto);
     try {
       return await this.prisma.message.create({
         data: {
