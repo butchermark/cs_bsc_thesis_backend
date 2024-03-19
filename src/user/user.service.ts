@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Observable, from } from 'rxjs';
 import { User } from './interfaces/user.interface';
 import * as crypto from 'crypto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -41,7 +40,7 @@ export class UserService {
     return user;
   }
 
-  async findAllUsersExepctUser(id: string): Promise<User[]> {
+  async findAllUsersExceptUser(id: string): Promise<User[]> {
     return this.prisma.user.findMany({
       where: {
         NOT: {
@@ -50,6 +49,20 @@ export class UserService {
       },
     });
   }
+
+  async searchUsers(searchString: string, userId: string): Promise<User[]> {
+    try {
+      const users = await this.findAllUsersExceptUser(userId); // Assuming this is an asynchronous function
+      const searchResult = users.filter((user) =>
+        user.name.toLowerCase().includes(searchString.toLowerCase()),
+      );
+      return searchResult;
+    } catch (error) {
+      console.error('Error in searchUsers:', error);
+      throw error;
+    }
+  }
+
   cannotFindUser(user: User): void {
     if (!user) {
       throw new HttpException(

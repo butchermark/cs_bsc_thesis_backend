@@ -8,13 +8,10 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './interfaces/user.interface';
-import { Observable } from 'rxjs';
 
-import axios from 'axios';
 //import { AdminAuthGuard, JwtAuthGuard } from '../../auth/guards/auth.guard';
 
 @Controller('user')
@@ -51,7 +48,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @Get('/:id')
   findAllUsersExepctUser(@Param('id') id: string): Promise<User[]> {
-    return this.userService.findAllUsersExepctUser(id);
+    return this.userService.findAllUsersExceptUser(id);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -131,5 +128,14 @@ export class UserController {
     @Param('type') type: string,
   ) {
     return await this.userService.checkForAccounts(userId, type);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('/search/:searchString/:userId')
+  async searchUsers(
+    @Param('searchString') searchString: string,
+    @Param('userId') userId: string,
+  ): Promise<User[]> {
+    return await this.userService.searchUsers(searchString, userId);
   }
 }

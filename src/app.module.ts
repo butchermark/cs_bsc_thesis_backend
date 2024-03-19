@@ -10,6 +10,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { MessageModule } from './message/message.module';
 import { RoomModule } from './room/room.module';
 import { ChatModule } from './chat/chat.module';
+import { NewsModule } from './news/news.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ChatModule } from './chat/chat.module';
     MessageModule,
     RoomModule,
     ChatModule,
+    NewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
